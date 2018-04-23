@@ -48,6 +48,9 @@ class SentimentAnalyzer(DataParser, Metrics):
         self.models[fname].train(train_X, train_Y, val_X, val_Y,
                                  epochs, batch_size, patience)
 
+    def print_model(self, fname):
+        self.models[fname].print_model()
+
     def rename_model(self, fname, new_name):
         try:
             print('[Rename] %s -> %s' % (fname, new_name))
@@ -87,9 +90,9 @@ class SentimentAnalyzer(DataParser, Metrics):
                 'acc': self.accuracy(Yp, Ygt),
                 'f1': self.f1_score(Yp, Ygt)}
     
-    def get_model(self, name):
+    def get_model(self, fname):
         try:
-            return self.models[name]
+            return self.models[fname]
         except:
             print('[Get] model not found.')
             return None

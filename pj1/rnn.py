@@ -56,18 +56,21 @@ class RNN():
 
         os.rename(old_path, new_path)
         self.model_path = new_path
+
+    def print_model(self):
+        self.model.summary()
     
-    def build_rnn(self, x, mtype):
+    def build_rnn(self, x, mtype, dim=128):
         if mtype == 'GRU':
-            x = GRU(128, activation='relu', dropout=0.2, name='GRU')(x)
+            x = GRU(dim, activation='relu', dropout=0.2, name='GRU')(x)
         elif mtype == 'LSTM':
-            x = LSTM(128, activation='relu', dropout=0.2, name='LSTM')(x)
+            x = LSTM(dim, activation='relu', dropout=0.2, name='LSTM')(x)
         elif mtype == 'Conv1D':
-            x = Conv1D(128, 3, activation='relu', name='Conv1D')(x)
+            x = Conv1D(dim, 3, activation='relu', name='Conv1D')(x)
             x = Flatten(name='Flatten')(x)
         return x
 
-    def build_model(self, maxlen, embedding_matrix, mtype='LSTM', n_inputs=2, verbose=False):
+    def build_model(self, maxlen, embedding_matrix, mtype='LSTM', n_inputs=2):
         name, ext = osp.splitext(osp.basename(self.model_path))
         if ext != ".h5": self.model_path += ".h5"
         n_words, emb_dim = embedding_matrix.shape
@@ -80,15 +83,12 @@ class RNN():
         x = self.build_rnn(x, mtype)
         x = Dense(64, activation='relu', name='Dense')(x)
         x = Dropout(0.2, name='Dropout')(x)
-        
         if n_inputs > 1: 
             x = Concatenate(name='Concatenate')([x, in_senti])
-
         out = Dense(1, activation='tanh', name='Tanh')(x)
 
         model = Model(inputs=[in_emb, in_senti][:n_inputs], outputs=out)
         model.compile(optimizer='adam', loss='mse', metrics=[f1])
-        if verbose: model.summary()
         model.save(self.model_path)
 
         self.model = model
@@ -105,6 +105,8 @@ class RNN():
 
         hist = history.history
         print('[RNN] best val MSE: %.4f' % np.min(hist['val_loss']))
+
+        self.model = load_model(self.model_path, custom_objects={'f1': f1})
 
     def predict(self, test_X):
         Yp = self.model.predict(test_X[:self.n_inputs])
