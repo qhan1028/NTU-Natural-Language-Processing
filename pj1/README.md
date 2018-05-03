@@ -2,7 +2,7 @@
 ## Team Members
 * b03902089 林良翰
 * b03902093 張庭維
-* b039020?? 陳奕先
+* b03902065 陳奕先
 
 ## Word Embedding Vectors
 * run `download.sh`
@@ -11,4 +11,4 @@
 * `sa.py` SentimentAnalyzer class
 * `rnn.py` model structures: GRU, LSTM, Con1D
 * `utils.py` DataParser class: read json, preprocess
-* `example.py` example usage of SentimentAnalyzer class
+* `main.py` example usage of SentimentAnalyzer class
