@@ -9,6 +9,11 @@
 
 ## Code Works
 * `sa.py` SentimentAnalyzer class
-* `rnn.py` model structures: GRU, LSTM, Con1D
+* `rnn.py` model structures: GRU, LSTM, Conv1D
 * `utils.py` DataParser class: read json, preprocess
-* `main.py` example usage of SentimentAnalyzer class
+* `main.py` example usage of SentimentAnalyzer class (GRU, LSTM, Conv1D models)
+
+## Usage
+
+* `$ python main.py`
+
