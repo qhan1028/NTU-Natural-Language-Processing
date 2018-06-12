@@ -20,4 +20,3 @@
 
 ## Usage
 * `$ python main.py`
-
